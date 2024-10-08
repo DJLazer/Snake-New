@@ -1,4 +1,3 @@
-import java.util.Iterator;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -20,7 +19,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
 
     Point food = new Point();
 
-    public SnakeGame(int WIDTH, int HEIGHT, int TILE_SIZE) {
+    public SnakeGame(int WIDTH, int HEIGHT, int TILE_SIZE, int SPEED) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.TILE_SIZE = TILE_SIZE;
@@ -28,12 +27,17 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         setPreferredSize(new Dimension(this.WIDTH, this.HEIGHT));
         setBackground(Color.black);
 
-        snake.add(new Point(5, 5));
+        if (Math.min(WIDTH, HEIGHT) / TILE_SIZE > 5) {
+            snake.add(new Point(5, 5));
+        }
+        else {
+            snake.add(new Point(0, 0));
+        }
 
         addKeyListener(this);
         setFocusable(true);
 
-        gameTimer = new Timer(135, this);
+        gameTimer = new Timer(SPEED, this);
     }
 
     public void startGame() {
@@ -42,7 +46,12 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
 
         requestFocus();
         snake.clear();
-        snake.addFirst(new Point(5, 5));
+        if (Math.min(WIDTH, HEIGHT) / TILE_SIZE > 5) {
+            snake.add(new Point(5, 5));
+        }
+        else {
+            snake.add(new Point(0, 0));
+        }
 
         lastDirection = null;
         moves.clear();
@@ -115,8 +124,8 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
 
     private void placeFood() {
         do {
-            food.x = (int) (Math.random() * (WIDTH / TILE_SIZE));
-            food.y = (int) (Math.random() * (HEIGHT / TILE_SIZE));
+            food.x = (int) (Math.random() * (double) (WIDTH / TILE_SIZE));
+            food.y = (int) (Math.random() * (double) (HEIGHT / TILE_SIZE));
         } while (snake.contains(food));
     }
 

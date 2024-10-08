@@ -17,6 +17,8 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
 
     Direction lastDirection = null;
 
+    private final boolean[] ignoreHeldKeys = {false, false, false, false};
+
     Point food = new Point();
 
     public SnakeGame(int WIDTH, int HEIGHT, int TILE_SIZE, int SPEED) {
@@ -133,6 +135,25 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+//        Color lightBg = new Color(80, 80, 80);
+//        Color darkBg = new Color(100, 100, 100);
+//
+//        for (int row = 0; row < HEIGHT; row += TILE_SIZE) {
+//            boolean isLight = row % (2 * TILE_SIZE) == 0;
+//            for (int col = 0; col < WIDTH; col += TILE_SIZE) {
+//                if (isLight) {
+//                    g.setColor(lightBg);
+//                }
+//                else {
+//                    g.setColor(darkBg);
+//                }
+//
+//                g.fillRect(row, col, TILE_SIZE, TILE_SIZE);
+//
+//                isLight = !isLight;
+//            }
+//        }
+
         // snake head
         if (!gameOver) {
             g.setColor(new Color(0, 150, 0));
@@ -181,6 +202,10 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
             return;
         }
 
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        }
+
         if (!gameStarted) {
             startGame();
         }
@@ -192,24 +217,28 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         Direction newDirection = null;
         switch(e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                if (currentDirection != Direction.DOWN) {
+                if (!ignoreHeldKeys[0] && currentDirection != Direction.DOWN) {
                     newDirection = Direction.UP;
                 }
+                ignoreHeldKeys[0] = true;
                 break;
             case KeyEvent.VK_RIGHT:
-                if (currentDirection != Direction.LEFT) {
+                if (!ignoreHeldKeys[1] && currentDirection != Direction.LEFT) {
                     newDirection = Direction.RIGHT;
                 }
+                ignoreHeldKeys[1] = true;
                 break;
             case KeyEvent.VK_LEFT:
-                if (currentDirection != Direction.RIGHT) {
+                if (!ignoreHeldKeys[2] && currentDirection != Direction.RIGHT) {
                     newDirection = Direction.LEFT;
                 }
+                ignoreHeldKeys[2] = true;
                 break;
             case KeyEvent.VK_DOWN:
-                if (currentDirection != Direction.UP) {
+                if (!ignoreHeldKeys[3] && currentDirection != Direction.UP) {
                     newDirection = Direction.DOWN;
                 }
+                ignoreHeldKeys[3] = true;
         }
 
         if (newDirection != null && moves.size() < 3) {
@@ -228,7 +257,19 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                ignoreHeldKeys[0] = false;
+                break;
+            case KeyEvent.VK_RIGHT:
+                ignoreHeldKeys[1] = false;
+                break;
+            case KeyEvent.VK_LEFT:
+                ignoreHeldKeys[2] = false;
+                break;
+            case KeyEvent.VK_DOWN:
+                ignoreHeldKeys[3] = false;
+        }
     }
 
     private enum Direction {

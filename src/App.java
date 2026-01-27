@@ -4,8 +4,8 @@ public class App {
     public static void main(String[] args) {
 
         int width, height, tile_size, speed;
-        width = 800;
-        height = 800;
+        width = 600;
+        height = 600;
         tile_size = 40;
         speed = 135;
 

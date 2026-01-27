@@ -1,7 +1,8 @@
 # Snake
 Play the classic game of snake made in Java Swing!
 
-![Example image](assets/example.png)
+<img src="assets/example.png" alt="Example image" width="300" height="300">
+
 ## Instructions
 Up arrow - move up
 
